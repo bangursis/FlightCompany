@@ -1,0 +1,70 @@
+<apex:page controller="Wizzard">
+    <apex:form id="form">
+        <apex:actionFunction name="createAddon" action="{!createAddon}" reRender="form">          
+            <apex:param name="departure" value="" assignTo="{!aName}"/>
+            <apex:param name="company" value="" assignTo="{!company}"/>
+        </apex:actionFunction>
+        <apex:actionFunction name="getFC" reRender="form" action="{!getFC}" oncomplete="fillSelect('{!fcNames}')"/>
+    </apex:form>
+    <head>
+        <apex:slds />
+    </head>
+    <body>
+        
+        <div class="slds-form-element slds-p-left_medium slds-p-top_medium slds-p-bottom_medium slds-p-right_medium">
+            <form>
+             
+                  <div>
+                      
+                      <div class="slds-col slds-size--1-of-1">                     
+                      
+                        <label class="slds-size--1-of-6"> Name: </label>
+                        <input type="text" id="name" class="slds-input slds-size--2-of-6" placeholder="Name" />          
+                      
+                        <br/>
+                          <br/>
+                            <div class="slds-select_container">
+								<label class="slds-size--1-of-6"> Flight Company: </label>
+                              <select class="slds-select slds-size--2-of-6 " id="selectFC" required="" onclick="getFC()">
+                                <option value="">Flight Company</option>
+                              </select>
+                          </div>
+                        </div>                      
+					</div>
+
+                    <br/>
+               		<apex:outputLink value="/apex/WizzardFl">
+                
+                        <button class="slds-button slds-button_brand slds-align_absolute-center" type="button" onclick="createAddonNPrice()">Create</button>
+					</apex:outputLink>
+                	<br/>
+                    <br/>
+					
+
+                </form>
+            
+        </div>
+    </body>
+    
+    <script>
+    function createAddonNPrice(){
+                let dep = document.getElementById("name").value;
+                let arr = document.getElementById("selectFC").value;
+        
+                createAddon(dep, arr);
+            }
+    
+            function fillSelect(fcs){
+                let names = JSON.parse(fcs);
+                let select = document.getElementById("selectFC");
+                select.innerHTML = "";
+                
+                names.forEach(a => {
+                    let option = document.createElement("option");
+                    option.innerHTML = a;
+                    select.appendChild(option);
+                });
+            }
+    
+    </script>
+</apex:page>

@@ -1,0 +1,119 @@
+<apex:page controller="BookingController">
+    <apex:form id="form">        
+		<apex:pageMessages />
+        <apex:actionFunction action="{!getCost}" name="getCost" reRender="form" oncomplete="updateCost('{!totalCost}')">
+        	<apex:param name="flight" value="" assignTo="{!flightField}"/>
+            <apex:param name="addon" value="" assignTo="{!addonField}"/>
+            <apex:param name="date" value="" assignTo="{!dateField}"/>
+        </apex:actionFunction>
+		<apex:actionFunction action="{!bookUp}" name="book" reRender="form" oncomplete="updateCost('{!totalCost}')">
+        	<apex:param name="flight" value="" assignTo="{!flightField}"/>
+            <apex:param name="addon" value="" assignTo="{!addonField}"/>
+            <apex:param name="date" value="" assignTo="{!dateField}"/>
+        </apex:actionFunction>
+        <apex:actionFunction action="{!search}" name="doSearch" reRender="form" oncomplete="renderTable('{!result}')">
+        	<apex:param name="flight" value="" assignTo="{!flightField}"/>
+            <apex:param name="addon" value="" assignTo="{!addonField}"/>
+            <apex:param name="date" value="" assignTo="{!dateField}"/>
+        </apex:actionFunction>
+	</apex:form>
+    <head>
+        <apex:slds />
+    </head>
+    <body class="slds-scope">
+        
+		<div class="slds-form-element slds-p-left_medium slds-p-top_medium slds-p-bottom_medium slds-p-right_medium">
+			<form>
+              <div class="slds-form-element__control">
+				<label class="slds-size--1-of-5"> Flight: </label>
+				<input type="text" id="inputFlight" class="slds-input slds-size--1-of-5" placeholder="Flights" />
+				<label class="slds-size--1-of-5 slds-m-left_xx-large"> Date: </label>
+				<input type="date" id="inputDate" class="slds-input slds-size--1-of-5 " placeholder="Date" />                 	
+              </div>
+                <br/>
+              <div class="slds-form-element__control">
+               	 <label class="slds-size--1-of-5"> Addon:</label>
+               	 <input type="text" id="inputAddon" class="slds-input slds-size--1-of-5" placeholder="Addons" />
+				<label class="slds-size--1-of-5 slds-m-left_xx-large"> Total cost: </label>
+				<label  id="calculatedPrice"></label>
+              </div>
+                <br/>
+                <button class="slds-button slds-button_neutral" type="button" onclick="search()">Search</button>
+                <button class="slds-button slds-button_neutral" onclick="calculate()" type="button">Get Cost</button>
+                <button class="slds-button slds-button_brand" onclick="bookUp()" type="button">Book</button>
+                <br/>
+                <br/>
+			</form>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+              <thead>
+                <tr class="slds-text-title_caps">
+                  <th scope="col">
+                    <div class="slds-truncate" title="Opportunity Name">Flight Name</div>
+                  </th>
+                  <th scope="col">
+                    <div class="slds-truncate" title="Account Name">Cost</div>
+                  </th>
+                  
+                </tr>
+              </thead>
+				<tbody>
+                </tbody>
+            </table>
+		</div>
+    </body>
+    <script>
+    
+    	function calculate(){
+            console.log("Inside Calculate");
+                
+			let x = document.getElementById("inputFlight").value;
+			let y = document.getElementById("inputAddon").value;
+			let z = document.getElementById("inputDate").value;
+            getCost(x, y, z);        	
+        }
+    	
+    	function updateCost(cost){
+        	console.log(cost);            
+            document.getElementById("calculatedPrice").innerHTML = cost.toString();
+        }
+    
+    	function bookUp(){
+            calculate();
+                
+			let x = document.getElementById("inputFlight").value;
+			let y = document.getElementById("inputAddon").value;
+			let z = document.getElementById("inputDate").value;
+            book(x, y, z);   
+        }
+    	function search(){
+        	let x = document.getElementById("inputFlight").value;
+			let y = document.getElementById("inputAddon").value;
+			let z = document.getElementById("inputDate").value;
+            doSearch(x, y, z);   
+        }
+    
+    	function renderTable(result){
+            let parsedResult = JSON.parse(result);
+            console.log(parsedResult);
+            let tbody = document.querySelector("tbody");
+            console.log(tbody.innerHTML);
+            parsedResult.map(json => renderTR(json));
+		}
+    
+    	function renderTR(json){
+        	let tbody = document.querySelector("tbody");
+            let tr = document.createElement("tr");
+            let thn = document.createElement("th");
+            let thv = document.createElement("th");
+            
+			thn.innerHTML = json.Name;
+            thv.innerHTML = json.Value__c;
+            
+            tr.appendChild(thn);
+            tr.appendChild(thv);
+            tbody.appendChild(tr);           
+        }
+    </script>
+    
+    
+</apex:page>

@@ -1,0 +1,38 @@
+<apex:page controller="BookingController">         
+
+    <apex:form >
+
+        <apex:pageBlock >       
+            <apex:pageBlockButtons >
+                    <apex:commandButton value="Get Cost" action="{!getCost}" />
+                    <apex:commandButton value="Book Flight" action="{!bookUp}"/>
+                    <apex:commandButton value="Search" action="{!search}"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages />
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Flight: </apex:outputLabel>
+                    <apex:inputField value="{!flight.Flight__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Addon: </apex:outputLabel>
+                    <apex:inputField value="{!flight.Addon__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Date: </apex:outputLabel>
+                    <apex:inputField value="{!flight.Date__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Value: </apex:outputLabel>
+                    <apex:outputLabel value="{!totalCost}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockTable value="{!flights}" var="item" >    
+                <apex:column value="{!item.Name}"/>                    
+                <apex:column value="{!item.Value__c}"/>    
+            </apex:pageBlockTable>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
